@@ -1,7 +1,7 @@
 pong.js
 =======
 
-Demo Page: https://www.left-right-up-down.com
+Demo Page: http://www.left-right-up-down.com
 
 VERSION 1.0
 -------------------------------------------------------------------------
