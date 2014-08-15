@@ -1,6 +1,8 @@
 pong.js
 =======
 
+Demo Page: https://www.left-right-up-down.com
+
 VERSION 1.0
 -------------------------------------------------------------------------
 This library was written to insert a game of 1-player playable PONG into
