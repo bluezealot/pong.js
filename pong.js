@@ -71,25 +71,7 @@
 
 var PONG = (function(){
     var body =
-        '<div id="game-pong-wrapper" style="width:50%;height:50%;position:absolute;left:25%;top:25%;overflow:hidden;border:1px solid #000;"> \
-            <div id="game-pong-top" style="width:100%;height:1px;position:absolute;top:-1px;left:0px;"></div> \
-            <div id="game-pong-left" style="width:1px;height:100%;position:absolute;top:0px;left:-1px;"></div> \
-            <div id="game-pong-score" style="position: absolute; left: 25%; top: 10px; width: 50%; display: block;padding: 0 auto;"> \
-                <div id="game-pong-p1Score" style="float: left;">0</div> \
-                <div id="game-pong-p2Score" style="float: right;">0</div> \
-            </div> \
-            <p id="game-pong-extraMsg" style="position:absolute;left:35%;top:30%;width:30%;text-align:center;"></p> \
-            <div style="position:absolute;left:35%;top:60%;width:30%;text-align:center;"> \
-                <p id="game-pong-pausedMsg">PAUSED</p> \
-                <p id="game-pong-startMsg">Press SPACE to un-pause.</p> \
-            </div> \
-            <div id="game-pong-blue" style="border-radius: 0 5px 5px 0;background-color: blue; height: 30%; width: 10px; position: absolute; left: 0px; top: 35%;"></div> \
-            <div id="game-pong-red" style="border-radius: 5px 0 0 5px;background-color: red; height: 30%; width: 10px; position: absolute; right: 0px; top: 35%;"></div> \
-            <div id="game-pong-ball" style="border-radius:5px;background-color: black; height: 10px; width: 10px; position: absolute; left: 50%; top: 50%;"></div> \
-            <div id="game-pong-right" style="width:1px;height:100%;position:absolute;top:0px;right:-1px;"></div> \
-            <div id="game-pong-bottom" style="width:100%;height:1px;position:absolute;bottom:-1px;left:0px;"></div> \
-            <div id="game-pong-exit" style="cursor: pointer;position:absolute;left:45%;bottom:10px;width:10%;text-align:center;border:1px solid #000;border-radius:5px;">exit game</div> \
-        </div>',
+        '<div id="game-pong-wrapper" style="width:50%;height:50%;position:absolute;left:25%;top:25%;overflow:hidden;border:1px solid #000;"><div id="game-pong-top" style="width:100%;height:1px;position:absolute;top:-1px;left:0px;"></div><div id="game-pong-left" style="width:1px;height:100%;position:absolute;top:0px;left:-1px;"></div><div id="game-pong-score" style="position: absolute; left: 25%; top: 10px; width: 50%; display: block;padding: 0 auto;"><div id="game-pong-p1Score" style="float: left;">0</div><div id="game-pong-p2Score" style="float: right;">0</div></div><p id="game-pong-extraMsg" style="position:absolute;left:35%;top:30%;width:30%;text-align:center;"></p><div style="position:absolute;left:35%;top:60%;width:30%;text-align:center;"><p id="game-pong-pausedMsg">PAUSED</p><p id="game-pong-startMsg">Press SPACE to un-pause.</p></div><div id="game-pong-blue" style="border-radius: 0 5px 5px 0;background-color: blue; height: 30%; width: 10px; position: absolute; left: 0px; top: 35%;"></div><div id="game-pong-red" style="border-radius: 5px 0 0 5px;background-color: red; height: 30%; width: 10px; position: absolute; right: 0px; top: 35%;"></div><div id="game-pong-ball" style="border-radius:5px;background-color: black; height: 10px; width: 10px; position: absolute; left: 50%; top: 50%;"></div><div id="game-pong-right" style="width:1px;height:100%;position:absolute;top:0px;right:-1px;"></div><div id="game-pong-bottom" style="width:100%;height:1px;position:absolute;bottom:-1px;left:0px;"></div><div id="game-pong-exit" style="cursor: pointer;position:absolute;left:45%;bottom:10px;width:10%;text-align:center;border:1px solid #000;border-radius:5px;">exit game</div></div>',
         GAME_SPEED = 5,
         BLUE_SPEED = 3,
         RED_SPEED = 3,
@@ -124,10 +106,10 @@ var PONG = (function(){
         collide,
         playGame,
         odd,
-        // for timing
         start,
-        sumTime = 0,
-        countLoop = 0,
+        endTime,
+        // sumTime = 0,
+        // countLoop = 0,
         //------
         keyMap = {
             keys: [P1UP, P1DO, P2UP, P2DO, SPAC, RSET]
@@ -191,6 +173,8 @@ var PONG = (function(){
             extraMsg.text('');
         },
         gameLoop = function(){
+            start = new Date();
+
             if(!playGame){
                 wrapper.remove();
                 return;
@@ -201,7 +185,6 @@ var PONG = (function(){
             }
 
             if(!paused){
-                // start = new Date();
 
                 if(!(keyMap[P1UP] && keyMap[P1DO])){
                     if(keyMap[P1UP]){
@@ -297,12 +280,19 @@ var PONG = (function(){
                     dir_x = dir_x < 0 ? Math.abs(sin) : Math.abs(sin) * -1 ;
                 }
 
-                // sumTime += (new Date()) - start;
-                // countLoop++;
-                // console.log(sumTime, countLoop, sumTime / countLoop);
             }
-            
-            setTimeout(gameLoop, GAME_SPEED);
+
+            endTime = (new Date()) - start;
+
+            // sumTime += endTime;
+            // countLoop++;
+            // console.log(sumTime, countLoop, sumTime / countLoop);
+
+            var nextLoop = GAME_SPEED - endTime;
+            if(nextLoop < 0){
+                nextLoop = 0;
+            }
+            setTimeout(gameLoop, nextLoop);
         },
         close = function(){
             playGame = false;
