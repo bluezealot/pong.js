@@ -71,7 +71,28 @@
 
 var PONG = (function(){
     var body =
-        '<div id="game-pong-wrapper" style="width:50%;height:50%;position:absolute;left:25%;top:25%;overflow:hidden;border:1px solid #000;"><div id="game-pong-top" style="width:100%;height:1px;position:absolute;top:-1px;left:0px;"></div><div id="game-pong-left" style="width:1px;height:100%;position:absolute;top:0px;left:-1px;"></div><div id="game-pong-score" style="position: absolute; left: 25%; top: 10px; width: 50%; display: block;padding: 0 auto;"><div id="game-pong-p1Score" style="float: left;">0</div><div id="game-pong-p2Score" style="float: right;">0</div></div><p id="game-pong-extraMsg" style="position:absolute;left:35%;top:30%;width:30%;text-align:center;"></p><div style="position:absolute;left:35%;top:60%;width:30%;text-align:center;"><p id="game-pong-pausedMsg">PAUSED</p><p id="game-pong-startMsg">Press SPACE to un-pause.</p></div><div id="game-pong-blue" style="border-radius: 0 5px 5px 0;background-color: blue; height: 30%; width: 10px; position: absolute; left: 0px; top: 35%;"></div><div id="game-pong-red" style="border-radius: 5px 0 0 5px;background-color: red; height: 30%; width: 10px; position: absolute; right: 0px; top: 35%;"></div><div id="game-pong-ball" style="border-radius:5px;background-color: black; height: 10px; width: 10px; position: absolute; left: 50%; top: 50%;"></div><div id="game-pong-right" style="width:1px;height:100%;position:absolute;top:0px;right:-1px;"></div><div id="game-pong-bottom" style="width:100%;height:1px;position:absolute;bottom:-1px;left:0px;"></div><div id="game-pong-exit" style="cursor: pointer;position:absolute;left:45%;bottom:10px;width:10%;text-align:center;border:1px solid #000;border-radius:5px;">exit game</div></div>',
+        '<div id="game-pong-wrapper" style="width:100%; height:100%;position:absolute;top:0;left:0;">'
+            + '<div id="game-pong-modal-bg" style="width:100%; height:100%;z-index:1000000;background-color:#CCC;opacity:0.6;"></div>'
+            + '<div id="game-pong-field" style="width:50%;height:50%;position:absolute;left:25%;top:25%;overflow:hidden;border:1px solid #000;z-index:1000001;background-color:#FFF;">'
+                + '<div id="game-pong-top" style="width:100%;height:1px;position:absolute;top:-1px;left:0px;"></div>'
+                + '<div id="game-pong-left" style="width:1px;height:100%;position:absolute;top:0px;left:-1px;"></div>'
+                + '<div id="game-pong-score" style="position: absolute; left: 25%; top: 10px; width: 50%; display: block;padding: 0 auto;">'
+                    + '<div id="game-pong-p1Score" style="float: left;">0</div>'
+                    + '<div id="game-pong-p2Score" style="float: right;">0</div>'
+                + '</div>'
+                + '<p id="game-pong-extraMsg" style="position:absolute;left:35%;top:30%;width:30%;text-align:center;"></p>'
+                + '<div style="position:absolute;left:35%;top:60%;width:30%;text-align:center;">'
+                    + '<p id="game-pong-pausedMsg">PAUSED</p>'
+                    + '<p id="game-pong-startMsg">Press SPACE to un-pause.</p>'
+                + '</div>'
+                + '<div id="game-pong-blue" style="border-radius: 0 5px 5px 0;background-color: blue; height: 30%; width: 10px; position: absolute; left: 0px; top: 35%;"></div>'
+                + '<div id="game-pong-red" style="border-radius: 5px 0 0 5px;background-color: red; height: 30%; width: 10px; position: absolute; right: 0px; top: 35%;"></div>'
+                + '<div id="game-pong-ball" style="border-radius:5px;background-color: black; height: 10px; width: 10px; position: absolute; left: 50%; top: 50%;"></div>'
+                + '<div id="game-pong-right" style="width:1px;height:100%;position:absolute;top:0px;right:-1px;"></div>'
+                + '<div id="game-pong-bottom" style="width:100%;height:1px;position:absolute;bottom:-1px;left:0px;"></div>'
+                + '<div id="game-pong-exit" style="cursor: pointer;position:absolute;left:45%;bottom:10px;width:10%;text-align:center;border:1px solid #000;border-radius:5px;">exit game</div>'
+            + '</div>'
+        + '</div>',
         GAME_SPEED = 5,
         BLUE_SPEED = 3,
         RED_SPEED = 3,
@@ -91,6 +112,7 @@ var PONG = (function(){
         blue,
         ball,
         wrapper,
+        field,
         top_bor,
         bottom_bor,
         left_bor,
@@ -148,6 +170,7 @@ var PONG = (function(){
             startMsg = $('#game-pong-startMsg'),
             extraMsg = $('#game-pong-extraMsg'),
             wrapper = $('#game-pong-wrapper'),
+            field = $('#game-pong-field'),
             top_bor = $('#game-pong-top'),
             bottom_bor = $('#game-pong-bottom'),
             left_bor = $('#game-pong-left'),
@@ -198,10 +221,10 @@ var PONG = (function(){
                         }
                     }
                     if(keyMap[P1DO]){
-                        if((blue.position().top + blue.height() + BLUE_SPEED) < wrapper.height()){
+                        if((blue.position().top + blue.height() + BLUE_SPEED) < field.height()){
                             blue.css('top', blue.position().top + BLUE_SPEED);
                         }else{
-                            var diff = (wrapper.height() - blue.position().top - blue.height());
+                            var diff = (field.height() - blue.position().top - blue.height());
                             if(diff > 1 && diff < BLUE_SPEED){
                                 blue.css('top', blue.position().top + diff);
                             }
@@ -216,10 +239,10 @@ var PONG = (function(){
                             direction = !direction;
                         }
                         if(direction){
-                            if((red.position().top + red.height() + RED_SPEED) < wrapper.height()){
+                            if((red.position().top + red.height() + RED_SPEED) < field.height()){
                                 red.css('top', red.position().top + RED_SPEED);
                             }else{
-                                var diff = (wrapper.height() - red.position().top - red.height());
+                                var diff = (field.height() - red.position().top - red.height());
                                 if(diff > 1 && diff < RED_SPEED){
                                     red.css('top', red.position().top + diff);
                                 }
