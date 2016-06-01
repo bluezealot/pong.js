@@ -1,9 +1,7 @@
 pong.js
 =======
 
-Demo Page: http://www.left-right-up-down.com
-
-VERSION 1.0
+VERSION 1.x
 -------------------------------------------------------------------------
 This library was written to insert a game of 1-player playable PONG into
 any web page without additional work. The only requirement for this
@@ -12,7 +10,7 @@ as well (untested).
 
 CONTROLS
 -------------------------------------------------------------------------
-SPACE - ause/unpause
+SPACE - pause/unpause
 Q - Move blue (P1) paddle up
 A - Move blue (P1) paddle down
 R - Reset game
